@@ -1,0 +1,21 @@
+.navItem {
+    color: var(--nav-text-color);
+    font-size: 20px;
+    text-decoration: none;
+    line-height: 24px;;
+}
+
+.selectedItem {
+    color: var(--nav-selected-text-color);
+}
+
+.wrapper {
+    margin-left: 15px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    border: 1px solid transparent;
+}
+.selectedWrapper {
+    border-bottom: 1px solid var(--nav-selected-text-color);;
+}
