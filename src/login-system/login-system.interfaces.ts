@@ -21,7 +21,7 @@ export interface LoginSystemLoginPostBody {
 }
 
 export interface LoginSystemRegisterPostBody {
-  username: string;
+  name: string;
   email: string;
   password: string;
 }

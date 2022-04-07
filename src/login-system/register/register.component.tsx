@@ -53,7 +53,7 @@ export const Register = () => {
     const formValues = [email, pass, username];
     const formErrors = [emailError, ...passErrors, ...usernameErrors];
     if (isFormCorrect(formValues, formErrors)) {
-      registerAccount({ username, email, password: pass });
+      registerAccount({ name: username, email, password: pass });
     }
   };
 
