@@ -63,7 +63,7 @@ export const Login = () => {
 
   return (
     <LoginSystemContainer>
-      <LoginSystemForm mainText="Login" onSubmit={onSubmit}>
+      <LoginSystemForm mainText="Prisijungimas" onSubmit={onSubmit}>
         <TextField
           {...textFieldProps.email}
           error={emailError.length !== 0}
@@ -116,7 +116,7 @@ export const Login = () => {
           variant="contained"
           className={styles.formButton}
         >
-          Login
+          Prisijungti
         </LoadingButton>
         <Button
           type="submit"
@@ -124,7 +124,7 @@ export const Login = () => {
           className={styles.formButton}
           onClick={() => navigateTo('/register')}
         >
-          Register
+          Registruotis
         </Button>
       </LoginSystemForm>
     </LoginSystemContainer>

@@ -59,7 +59,7 @@ export const Register = () => {
 
   return (
     <LoginSystemContainer>
-      <LoginSystemForm mainText="Register" onSubmit={onSubmit}>
+      <LoginSystemForm mainText="Registracija" onSubmit={onSubmit}>
         <TextField
           {...textFieldProps.username}
           error={usernameErrors.length !== 0}
@@ -122,14 +122,14 @@ export const Register = () => {
           className={styles.formButton}
           type="submit"
         >
-          Register
+          Registruotis
         </LoadingButton>
         <div className={styles.bottom}>
           <Typography variant="body1" className={styles.bottomText}>
-            Have an account already?{' '}
+            Jau turite paskyrą?{' '}
           </Typography>
           <Link to="/login" className={styles.bottomTextLink}>
-            Sign In
+            Prisijungti
           </Link>
         </div>
       </LoginSystemForm>

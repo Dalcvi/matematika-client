@@ -1,13 +1,16 @@
+import { useAppSelector } from './../../store/store.hooks';
 import { useMemo } from 'react';
 import axios, { AxiosError } from 'axios';
 import { useDispatch } from 'react-redux';
 import { LOGIN_LOADING_STATE_ID, LOGIN_URI, SUCCESSFUL_LOGIN } from './';
 import { setLoadingState } from '../../loading';
 import { LoginSystemLoginPostBody } from '..';
-import { authenticateUser } from '../../user';
+import { authenticateUser, setUser } from '../../user';
 
 export const useLogin = () => {
   const dispatch = useDispatch();
+  const state = useAppSelector(state => state);
+  console.log(state);
 
   const login = useMemo(
     () => async (loginInfo: LoginSystemLoginPostBody) => {
@@ -19,8 +22,10 @@ export const useLogin = () => {
       );
       return axios
         .post(LOGIN_URI, loginInfo)
-        .then(() => {
-          dispatch(authenticateUser());
+        .then(data => {
+          window.localStorage.setItem('auth', data.data);
+          dispatch(setUser({ _id: 'test', email: 'test' }));
+          // dispatch(authenticateUser());
         })
         .then(() => {
           dispatch(

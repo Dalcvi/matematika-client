@@ -1,5 +1,6 @@
 export interface NavItemProps {
   title: string;
-  to: string;
+  to?: string;
+  onClick?: () => void;
   isActive: boolean;
 }
