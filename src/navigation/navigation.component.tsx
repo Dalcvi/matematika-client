@@ -20,6 +20,11 @@ export const Navigation = () => {
       to: RoutePaths.login,
       onClick: () => {},
     },
+    {
+      title: 'Topikai',
+      to: RoutePaths.topicList,
+      onClick: () => {},
+    },
   ];
   const authNavigationList = [
     {
@@ -33,6 +38,11 @@ export const Navigation = () => {
         dispatch(logoutUser());
         window.localStorage.removeItem('auth');
       },
+    },
+    {
+      title: 'Topikai',
+      to: RoutePaths.topicList,
+      onClick: () => {},
     },
   ];
   const list = user ? authNavigationList : guestNavigationList;
