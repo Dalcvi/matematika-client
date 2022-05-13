@@ -1,6 +1,7 @@
 import { NavigateNextTwoTone } from '@mui/icons-material';
 import { Grid, Container, Paper, Typography, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useAppSelector } from '../store';
 import { TopicProps } from '../topic-view-page/topic.types';
 import { TopicListItem } from './topic-list-item';
 import styles from './topic-list.module.css';
@@ -27,18 +28,22 @@ const topics: TopicProps[] = [fakeTopic, fakeTopic, fakeTopic, fakeTopic];
 
 export const TopicList = () => {
   const navigateTo = useNavigate();
+  const user = useAppSelector(state => state.user);
+  const isLoggedIn = user?._id !== undefined;
 
   return (
     <Container>
       <Paper elevation={6} className={styles.gridContainer}>
         <header className={styles.header}>
           <Typography variant="h2">Temos</Typography>
-          <Button
-            variant="contained"
-            onClick={() => navigateTo('/sukurti-tema')}
-          >
-            Sukurti temą
-          </Button>
+          {isLoggedIn && (
+            <Button
+              variant="contained"
+              onClick={() => navigateTo('/sukurti-tema')}
+            >
+              Sukurti temą
+            </Button>
+          )}
         </header>
         <Grid
           container
