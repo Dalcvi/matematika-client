@@ -119,10 +119,9 @@ export const Login = () => {
           Prisijungti
         </LoadingButton>
         <Button
-          type="submit"
           variant="outlined"
           className={styles.formButton}
-          onClick={() => navigateTo('/register')}
+          onClick={() => navigateTo('/registracija')}
         >
           Registruotis
         </Button>

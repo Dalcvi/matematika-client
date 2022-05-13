@@ -1,0 +1,28 @@
+.questionContainer {
+    padding-left: 20px;
+    list-style-type: none;
+}
+
+.answerContainer {
+    padding-left: 30px;
+    list-style-type: none;
+}
+
+.container {
+    padding: 20px;
+    margin-bottom: 40px;
+}
+
+.textField, .questionsTitle {
+    margin-top: 15px;
+}
+
+.answer {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+.divider {
+margin-top: 10px;
+}

@@ -4,4 +4,5 @@
     justify-content: center;
     height: calc(100vh - var(--navbar-height));
     width: 100%;
+    margin-top: -40px;
 }

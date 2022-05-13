@@ -1,15 +1,9 @@
-import {
-  Card,
-  CardContent,
-  Typography,
-  CardActions,
-  Button,
-  Grid,
-  Container,
-} from '@mui/material';
-import { FC } from 'react';
+import { NavigateNextTwoTone } from '@mui/icons-material';
+import { Grid, Container, Paper, Typography, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { TopicProps } from '../topic-view-page/topic.types';
 import { TopicListItem } from './topic-list-item';
+import styles from './topic-list.module.css';
 
 type Props = { topics: TopicProps[] };
 
@@ -32,21 +26,32 @@ const fakeTopic: TopicProps = {
 const topics: TopicProps[] = [fakeTopic, fakeTopic, fakeTopic, fakeTopic];
 
 export const TopicList = () => {
+  const navigateTo = useNavigate();
+
   return (
     <Container>
-      <Grid
-        container
-        // direction="row"
-        // justifyContent="space-around"
-        // alignItems="center"
-        spacing={{ xs: 2, md: 3 }}
-        columns={{ xs: 2, sm: 2, md: 12, lg: 12 }}
-        sx={{ width: '20%' }}
-      >
-        {topics.map(value => (
-          <TopicListItem key={value.id} topic={value} />
-        ))}
-      </Grid>
+      <Paper elevation={6} className={styles.gridContainer}>
+        <header className={styles.header}>
+          <Typography variant="h2">Temos</Typography>
+          <Button
+            variant="contained"
+            onClick={() => navigateTo('/sukurti-tema')}
+          >
+            Sukurti temą
+          </Button>
+        </header>
+        <Grid
+          container
+          spacing={{ xs: 2, md: 3 }}
+          columns={{ xs: 2, sm: 2, md: 12, lg: 12 }}
+          sx={{ width: '20%' }}
+          className={styles.grid}
+        >
+          {topics.map(value => (
+            <TopicListItem key={value.id} topic={value} />
+          ))}
+        </Grid>
+      </Paper>
     </Container>
   );
 };

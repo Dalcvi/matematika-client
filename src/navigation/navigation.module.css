@@ -1,16 +1,14 @@
 .navigation {
     width: 100%;
     height: var(--navbar-height);
-    margin: auto;
+    margin-bottom: 40px;
 }
 
 .contentContainer {
-    max-width: 1200px;
     height: 100%;
-    width: 90%;
     display: flex;
-    justify-content: flex-end;
     align-items: center;
+    justify-content: flex-end;
 }
 .navList {
     list-style-type: none;

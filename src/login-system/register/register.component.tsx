@@ -128,7 +128,7 @@ export const Register = () => {
           <Typography variant="body1" className={styles.bottomText}>
             Jau turite paskyrą?{' '}
           </Typography>
-          <Link to="/login" className={styles.bottomTextLink}>
+          <Link to="/prisijungti" className={styles.bottomTextLink}>
             Prisijungti
           </Link>
         </div>

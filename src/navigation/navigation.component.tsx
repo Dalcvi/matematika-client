@@ -1,3 +1,4 @@
+import { Container, Paper } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
 import { RoutePaths } from '../router';
 import { useAppDispatch, useAppSelector } from '../store';
@@ -11,8 +12,8 @@ export const Navigation = () => {
   const user = useAppSelector(state => state.user);
   const guestNavigationList = [
     {
-      title: 'Pagrindinis',
-      to: RoutePaths.home,
+      title: 'Temos',
+      to: RoutePaths.topicList,
       onClick: () => {},
     },
     {
@@ -20,16 +21,11 @@ export const Navigation = () => {
       to: RoutePaths.login,
       onClick: () => {},
     },
-    {
-      title: 'Topikai',
-      to: RoutePaths.topicList,
-      onClick: () => {},
-    },
   ];
   const authNavigationList = [
     {
-      title: 'Pagrindinis',
-      to: RoutePaths.home,
+      title: 'Temos',
+      to: RoutePaths.topicList,
       onClick: () => {},
     },
     {
@@ -38,11 +34,6 @@ export const Navigation = () => {
         dispatch(logoutUser());
         window.localStorage.removeItem('auth');
       },
-    },
-    {
-      title: 'Topikai',
-      to: RoutePaths.topicList,
-      onClick: () => {},
     },
   ];
   const list = user ? authNavigationList : guestNavigationList;
@@ -58,10 +49,12 @@ export const Navigation = () => {
   });
 
   return (
-    <header className={styles.navigation}>
-      <div className={styles.contentContainer}>
-        <ul className={styles.navList}>{navItemList}</ul>
-      </div>
-    </header>
+    <Paper elevation={6} square={true}>
+      <header className={styles.navigation}>
+        <Container className={styles.contentContainer}>
+          <ul className={styles.navList}>{navItemList}</ul>
+        </Container>
+      </header>
+    </Paper>
   );
 };

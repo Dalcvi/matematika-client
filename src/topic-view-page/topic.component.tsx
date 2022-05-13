@@ -10,6 +10,7 @@ import {
   CircularProgress,
   Container,
   Divider,
+  Paper,
   Typography,
 } from '@mui/material';
 import { useParams } from 'react-router-dom';
@@ -17,6 +18,7 @@ import { useAppDispatch, useAppSelector } from '../store';
 import { getTopic } from './topic.middleware';
 import { TOPIC_LOADING_STATE_ID } from './topic.constants';
 import { SelectedAnswers } from './topic.types';
+import styles from './topic.module.css';
 
 export function Topic() {
   const [value, setValue] = React.useState<SelectedAnswers>({});
@@ -35,7 +37,7 @@ export function Topic() {
     if (!topic && topicId) {
       dispatch(getTopic(topicId));
     }
-  }, [topicId, topic]);
+  }, [topicId, topic, dispatch]);
 
   const handleRadioChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -49,53 +51,57 @@ export function Topic() {
   if (isLoading || !topic) {
     return (
       <Container>
-        <CircularProgress />
+        <Paper elevation={6} className={styles.loaderContainer}>
+          <CircularProgress />
+        </Paper>
       </Container>
     );
   }
   return (
     <Container>
-      <Typography variant="h2" color="text.primary" gutterBottom>
-        {topic.title}
-      </Typography>
-      <Typography variant="body1" color="text.primary" gutterBottom>
-        {topic.text}
-      </Typography>
-      <form>
-        <FormControl
-          sx={{ p: 3, width: '100%' }}
-          error={error}
-          variant="standard"
-        >
-          {topic.questions.map(question => (
-            <>
-              <Divider sx={{ mb: 3 }} />
-              <FormLabel id="demo-error-radios">
-                {question.questionText}
-              </FormLabel>
-              <RadioGroup
-                aria-labelledby="demo-error-radios"
-                name="quiz"
-                value={value[question.id] || ''}
-                onChange={event => handleRadioChange(event, question.id)}
-              >
-                {question.possibleAnswers.map(answer => (
-                  <FormControlLabel
-                    value={answer}
-                    control={<Radio />}
-                    label={answer}
-                    key={answer}
-                  />
-                ))}
-              </RadioGroup>
-              <FormHelperText>{helperText}</FormHelperText>
-            </>
-          ))}
-          <Button sx={{ mt: 1, mr: 1 }} type="submit" variant="outlined">
-            Patikrinti atsakymą
-          </Button>
-        </FormControl>
-      </form>
+      <Paper elevation={6} className={styles.contentContainer}>
+        <Typography variant="h2" color="text.primary" gutterBottom>
+          {topic.title}
+        </Typography>
+        <Typography variant="body1" color="text.primary" gutterBottom>
+          {topic.text}
+        </Typography>
+        <form>
+          <FormControl
+            sx={{ p: 3, width: '100%' }}
+            error={error}
+            variant="standard"
+          >
+            {topic.questions.map(question => (
+              <>
+                <Divider sx={{ mb: 3 }} />
+                <FormLabel id="demo-error-radios">
+                  {question.questionText}
+                </FormLabel>
+                <RadioGroup
+                  aria-labelledby="demo-error-radios"
+                  name="quiz"
+                  value={value[question.id] || ''}
+                  onChange={event => handleRadioChange(event, question.id)}
+                >
+                  {question.possibleAnswers.map(answer => (
+                    <FormControlLabel
+                      value={answer}
+                      control={<Radio />}
+                      label={answer}
+                      key={answer}
+                    />
+                  ))}
+                </RadioGroup>
+                <FormHelperText>{helperText}</FormHelperText>
+              </>
+            ))}
+            <Button sx={{ mt: 1, mr: 1 }} type="submit" variant="outlined">
+              Patikrinti atsakymą
+            </Button>
+          </FormControl>
+        </form>
+      </Paper>
     </Container>
   );
 }

@@ -1,7 +1,7 @@
 export enum RoutePaths {
-  login = '/login',
-  register = '/register',
-  topicList = '/topic-list',
-  topic = '/topic/:topicId',
-  home = '/',
+  login = '/prisijungti',
+  register = '/registracija',
+  topicList = '/',
+  topic = '/tema/:topicId',
+  addTopic = '/sukurti-tema',
 }

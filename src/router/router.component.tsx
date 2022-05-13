@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
+import { AddTopicPage } from '../add-topic-page';
 import { Login, Register } from '../login-system';
 import { TopicList } from '../topic-list-page';
 import { Topic } from '../topic-view-page';
@@ -7,10 +8,10 @@ import { RoutePaths } from './';
 export const Router = () => {
   return (
     <Routes>
-      <Route index element={<div>Hello world!</div>} />
+      <Route path={RoutePaths.addTopic} element={<AddTopicPage />} />
       <Route path={RoutePaths.login} element={<Login />} />
       <Route path={RoutePaths.register} element={<Register />} />
-      <Route path={RoutePaths.topicList} element={<TopicList />} />
+      <Route index element={<TopicList />} />
       <Route path={RoutePaths.topic} element={<Topic />} />
     </Routes>
   );

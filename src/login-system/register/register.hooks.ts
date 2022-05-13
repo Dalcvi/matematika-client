@@ -28,7 +28,7 @@ export const useRegistration = () => {
               isLoading: false,
             }),
           );
-          navigateTo('/login');
+          navigateTo('/prisijungti');
         })
         .catch((reason: AxiosError) => {
           dispatch(

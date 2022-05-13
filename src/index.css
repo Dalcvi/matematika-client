@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -22,4 +24,8 @@ code {
   --navbar-height: 50px;
   --nav-text-color: rgb(0, 112, 36);
   --nav-selected-text-color: rgb(0, 77, 24);
+}
+
+button {
+  font-family: 'Roboto', sans-serif;
 }
