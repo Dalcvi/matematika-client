@@ -19,6 +19,7 @@ type TopicProp = {
   isAdmin: boolean;
   show: boolean;
   completed: boolean;
+  deleteTopic: () => void;
 };
 
 export const TopicListItem: FC<TopicProp> = ({
@@ -26,6 +27,7 @@ export const TopicListItem: FC<TopicProp> = ({
   isAdmin,
   show,
   completed,
+  deleteTopic,
 }) => {
   const navigateTo = useNavigate();
   const user = useAppSelector(state => state.user);
@@ -51,7 +53,7 @@ export const TopicListItem: FC<TopicProp> = ({
             </div>
           </>
         )}
-        <Card sx={{ minWidth: 275 }}>
+        <Card sx={{ minWidth: 275, padding: `5px` }}>
           <CardActionArea onClick={() => navigateTo(`/tema/${topic.id}`)}>
             <CardContent>
               <Typography variant="h5" color="text.secondary" gutterBottom>
@@ -65,6 +67,16 @@ export const TopicListItem: FC<TopicProp> = ({
               onClick={() => navigateTo(`/redaguoti-tema/${topic.id}`)}
             >
               Redaguoti
+            </Button>
+          )}
+          {isAdmin && (
+            <Button
+              className={styles.removeButton}
+              onClick={deleteTopic}
+              variant="contained"
+              color="error"
+            >
+              Ištrinti
             </Button>
           )}
         </Card>

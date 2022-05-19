@@ -67,6 +67,18 @@ export const TopicList = () => {
                   !!user?.solvedTopics.includes(topics[index - 1].id)
                 }
                 completed={!!user?.solvedTopics.includes(value.id)}
+                deleteTopic={() => {
+                  setIsLoading(true);
+                  axios
+                    .delete(`/topics/${value.id}`)
+                    .then(() => {
+                      setIsLoading(false);
+                      setTopics(topics.filter(topic => topic.id !== value.id));
+                    })
+                    .catch(() => {
+                      setIsLoading(false);
+                    });
+                }}
               />
             );
           })}
