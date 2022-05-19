@@ -19,7 +19,9 @@ export const AddTopicPage = () => {
   const [howManyQuestions, setHowManyQuestions] = useState(0);
   const [howManyQuestionAnswers, setHowManyQuestionAnswers] =
     useState<HowManyAnswersByQuestionIndex>({});
-
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
   return (
     <Container>
       <Paper elevation={6} className={styles.container}>
@@ -28,7 +30,7 @@ export const AddTopicPage = () => {
           Įveskite temos pavadinimą ir aprašymą.
         </Typography>
         <Divider className={styles.divider} />
-        <form>
+        <form onSubmit={onSubmit}>
           <TextField
             className={styles.textField}
             type="text"
@@ -138,6 +140,7 @@ export const AddTopicPage = () => {
                             required
                           />
                           <Button
+                            type="button"
                             onClick={() => {
                               setHowManyQuestionAnswers({
                                 ...howManyQuestionAnswers,
@@ -169,6 +172,7 @@ export const AddTopicPage = () => {
                     },
                   )}
                   <Button
+                    type="button"
                     onClick={() => {
                       setHowManyQuestionAnswers({
                         ...howManyQuestionAnswers,
@@ -194,22 +198,43 @@ export const AddTopicPage = () => {
                   >
                     Pridėti atsakymą
                   </Button>
+                  <TextField
+                    className={styles.hint}
+                    id={i + 'Hint'}
+                    type="text"
+                    variant="standard"
+                    fullWidth
+                    label={`Užuomina ${i + 1}`}
+                    placeholder="Užuomina"
+                    required
+                  />
                 </ul>
               </li>
             ))}
             <Button
+              type="button"
               className={styles.divider}
               onClick={() => {
                 setHowManyQuestions(howManyQuestions + 1);
                 setQuestions([
                   ...questions,
-                  { questionText: '', possibleAnswers: [], correctAnswer: -1 },
+                  {
+                    questionText: '',
+                    possibleAnswers: [],
+                    correctAnswer: -1,
+                    hint: '',
+                  },
                 ]);
               }}
             >
               Pridėti klausimą
             </Button>
           </ul>
+          <div className={styles.submitContainer}>
+            <Button type="submit" variant="contained" color="primary">
+              Sukurti
+            </Button>
+          </div>
         </form>
       </Paper>
     </Container>

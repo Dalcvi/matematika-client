@@ -13,7 +13,9 @@ export const authenticateUser = createAsyncThunk(
   async (_, { dispatch }) => {
     dispatch(setLoadingState({ id: USER_LOADING_STATE_ID, isLoading: true }));
     axios
-      .get<User>(GET_USER_URI)
+      .get<User>(GET_USER_URI, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('auth')}` },
+      })
       .then(response => {
         dispatch(setUser(response.data));
       })

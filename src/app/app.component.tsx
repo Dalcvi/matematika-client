@@ -7,12 +7,17 @@ import { Navigation } from '../navigation';
 
 export function App() {
   const user = useAppSelector(state => state.user);
+  const isUserLoading = useAppSelector(state => state.loading['user']);
   const dispatch = useAppDispatch();
   useEffect(() => {
     if (!user && window.localStorage.getItem('auth')) {
-      dispatch(setUser({ _id: 'test', email: 'test' }));
+      dispatch(authenticateUser());
     }
   }, [dispatch, user]);
+
+  if (isUserLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
