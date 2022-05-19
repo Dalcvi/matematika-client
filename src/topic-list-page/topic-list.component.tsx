@@ -54,7 +54,11 @@ export const TopicList = () => {
           className={styles.grid}
         >
           {topics.map(value => (
-            <TopicListItem key={value.id} topic={value} />
+            <TopicListItem
+              key={value.id}
+              topic={value}
+              isAdmin={user?.isAdmin ?? false}
+            />
           ))}
         </Grid>
       </Paper>
