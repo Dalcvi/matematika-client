@@ -24,8 +24,7 @@ export const useLogin = () => {
         .post(LOGIN_URI, loginInfo)
         .then(data => {
           window.localStorage.setItem('auth', data.data);
-          dispatch(setUser({ _id: 'test', email: 'test' }));
-          // dispatch(authenticateUser());
+          dispatch(authenticateUser());
         })
         .then(() => {
           dispatch(

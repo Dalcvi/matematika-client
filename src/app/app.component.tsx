@@ -4,6 +4,7 @@ import { authenticateUser, setUser } from '../user';
 import { useAppDispatch, useAppSelector } from '../store';
 import { Router } from '../router';
 import { Navigation } from '../navigation';
+import { Loader } from '../loader';
 
 export function App() {
   const user = useAppSelector(state => state.user);
@@ -16,7 +17,7 @@ export function App() {
   }, [dispatch, user]);
 
   if (isUserLoading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   return (

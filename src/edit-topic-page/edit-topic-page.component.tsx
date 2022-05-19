@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { CreatingQuestion, HowManyAnswersByQuestionIndex } from '.';
-import styles from './add-topic-page.module.css';
+import styles from './edit-topic-page.module.css';
 
 export const AddTopicPage = () => {
   const [title, setTitle] = useState('');
@@ -37,7 +37,7 @@ export const AddTopicPage = () => {
   return (
     <Container>
       <Paper elevation={6} className={styles.container}>
-        <Typography variant="h2">Sukurkite temą</Typography>
+        <Typography variant="h2">Atnaujinkite temą</Typography>
         <Typography variant="h5">
           Įveskite temos pavadinimą ir aprašymą.
         </Typography>
@@ -255,7 +255,7 @@ export const AddTopicPage = () => {
           </ul>
           <div className={styles.submitContainer}>
             <Button type="submit" variant="contained" color="primary">
-              Sukurti
+              Atnaujinti
             </Button>
           </div>
         </form>

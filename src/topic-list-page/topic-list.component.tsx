@@ -30,13 +30,14 @@ export const TopicList = () => {
   const navigateTo = useNavigate();
   const user = useAppSelector(state => state.user);
   const isLoggedIn = user?._id !== undefined;
+  const showCreateButton = isLoggedIn && user?.isAdmin;
 
   return (
     <Container>
       <Paper elevation={6} className={styles.gridContainer}>
         <header className={styles.header}>
           <Typography variant="h2">Temos</Typography>
-          {isLoggedIn && (
+          {showCreateButton && (
             <Button
               variant="contained"
               onClick={() => navigateTo('/sukurti-tema')}
