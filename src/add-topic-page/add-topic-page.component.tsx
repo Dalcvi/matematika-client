@@ -10,10 +10,13 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CreatingQuestion, HowManyAnswersByQuestionIndex } from '.';
 import styles from './add-topic-page.module.css';
 
 export const AddTopicPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const navigateTo = useNavigate();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [questions, setQuestions] = useState<CreatingQuestion[]>([]);
@@ -22,30 +25,27 @@ export const AddTopicPage = () => {
     useState<HowManyAnswersByQuestionIndex>({});
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    axios.post('/topics', {
-      title,
-      text: content,
-      questions: questions.map(
-        ({ questionText, correctAnswer, possibleAnswers, hint }) => ({
-          questionText,
-          correctAnswer: possibleAnswers[correctAnswer].text,
-          hint,
-          possibleAnswers: possibleAnswers.map(({ text }) => text),
-        }),
-      ),
-    });
-    console.log({
-      title,
-      text: content,
-      questions: questions.map(
-        ({ questionText, correctAnswer, possibleAnswers, hint }) => ({
-          questionText,
-          correctAnswer: possibleAnswers[correctAnswer].text,
-          hint,
-          possibleAnswers: possibleAnswers.map(({ text }) => text),
-        }),
-      ),
-    });
+    setIsLoading(true);
+    axios
+      .post('/topics', {
+        title,
+        text: content,
+        questions: questions.map(
+          ({ questionText, correctAnswer, possibleAnswers, hint }) => ({
+            questionText,
+            correctAnswer: possibleAnswers[correctAnswer].text,
+            hint,
+            possibleAnswers: possibleAnswers.map(({ text }) => text),
+          }),
+        ),
+      })
+      .then(() => {
+        setIsLoading(false);
+        navigateTo('/');
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
   };
   return (
     <Container>
@@ -267,7 +267,12 @@ export const AddTopicPage = () => {
             </Button>
           </ul>
           <div className={styles.submitContainer}>
-            <Button type="submit" variant="contained" color="primary">
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={isLoading}
+            >
               Sukurti
             </Button>
           </div>

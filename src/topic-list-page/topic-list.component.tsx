@@ -1,5 +1,7 @@
 import { NavigateNextTwoTone } from '@mui/icons-material';
 import { Grid, Container, Paper, Typography, Button } from '@mui/material';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../store';
 import { TopicProps } from '../topic-view-page/topic.types';
@@ -8,29 +10,28 @@ import styles from './topic-list.module.css';
 
 type Props = { topics: TopicProps[] };
 
-const fakeTopic: TopicProps = {
-  id: 'id',
-  title: 'title',
-  text: 'text',
-  index: 0,
-  questions: [
-    {
-      id: 'id',
-      topicId: 'topicId',
-      possibleAnswers: [],
-      correctAnswer: 'correctAnswer',
-      questionText: 'questionText',
-    },
-  ],
-};
-
-const topics: TopicProps[] = [fakeTopic, fakeTopic, fakeTopic, fakeTopic];
+// const topics: TopicProps[] = [fakeTopic, fakeTopic, fakeTopic, fakeTopic];
 
 export const TopicList = () => {
   const navigateTo = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [topics, setTopics] = useState<TopicProps[]>([]);
   const user = useAppSelector(state => state.user);
   const isLoggedIn = user?.id !== undefined;
   const showCreateButton = isLoggedIn && user?.isAdmin;
+
+  useEffect(() => {
+    setIsLoading(true);
+    axios
+      .get('/topics')
+      .then(res => {
+        setTopics(res.data);
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
+  }, []);
 
   return (
     <Container>

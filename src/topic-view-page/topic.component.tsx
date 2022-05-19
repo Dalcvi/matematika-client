@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -17,27 +17,30 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../store';
 import { getTopic } from './topic.middleware';
 import { TOPIC_LOADING_STATE_ID } from './topic.constants';
-import { SelectedAnswers } from './topic.types';
+import { SelectedAnswers, TopicProps } from './topic.types';
 import styles from './topic.module.css';
+import axios from 'axios';
 
 export function Topic() {
   const [value, setValue] = React.useState<SelectedAnswers>({});
   const [error, setError] = React.useState(false);
   const [helperText, setHelperText] = React.useState('Choose wisely');
-
   const { topicId } = useParams();
-  const topic = useAppSelector(state => state.topic).find(
-    topic => topic.id === topicId,
-  );
-  const dispatch = useAppDispatch();
-  const isLoading = useAppSelector(state => state.loading)[
-    TOPIC_LOADING_STATE_ID
-  ];
+  const [isLoading, setIsLoading] = useState(false);
+  const [topic, setTopic] = useState<TopicProps | null>();
+
   useEffect(() => {
-    if (!topic && topicId) {
-      dispatch(getTopic(topicId));
-    }
-  }, [topicId, topic, dispatch]);
+    setIsLoading(true);
+    axios
+      .get<TopicProps>('/topics/' + topicId)
+      .then(res => {
+        setTopic(res.data);
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
+  }, []);
 
   const handleRadioChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -81,8 +84,10 @@ export function Topic() {
                 <RadioGroup
                   aria-labelledby="demo-error-radios"
                   name="quiz"
-                  value={value[question.id] || ''}
-                  onChange={event => handleRadioChange(event, question.id)}
+                  value={value[question.questionText] || ''}
+                  onChange={event =>
+                    handleRadioChange(event, question.questionText)
+                  }
                 >
                   {question.possibleAnswers.map(answer => (
                     <FormControlLabel
