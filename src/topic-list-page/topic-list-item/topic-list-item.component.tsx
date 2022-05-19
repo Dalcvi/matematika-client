@@ -19,7 +19,7 @@ type TopicProp = { topic: TopicProps; isAdmin: boolean };
 export const TopicListItem: FC<TopicProp> = ({ topic, isAdmin }) => {
   const navigateTo = useNavigate();
   const user = useAppSelector(state => state.user);
-  const isLoggedIn = user?._id !== undefined;
+  const isLoggedIn = user?.id !== undefined;
 
   const isDisabled = !isLoggedIn && !isAdmin;
   return (

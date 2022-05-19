@@ -8,6 +8,7 @@ import {
   Radio,
   Divider,
 } from '@mui/material';
+import axios from 'axios';
 import { useState } from 'react';
 import { CreatingQuestion, HowManyAnswersByQuestionIndex } from '.';
 import styles from './add-topic-page.module.css';
@@ -21,6 +22,18 @@ export const AddTopicPage = () => {
     useState<HowManyAnswersByQuestionIndex>({});
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    axios.post('/topics', {
+      title,
+      text: content,
+      questions: questions.map(
+        ({ questionText, correctAnswer, possibleAnswers, hint }) => ({
+          questionText,
+          correctAnswer: possibleAnswers[correctAnswer].text,
+          hint,
+          possibleAnswers: possibleAnswers.map(({ text }) => text),
+        }),
+      ),
+    });
     console.log({
       title,
       text: content,

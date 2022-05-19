@@ -29,7 +29,7 @@ const topics: TopicProps[] = [fakeTopic, fakeTopic, fakeTopic, fakeTopic];
 export const TopicList = () => {
   const navigateTo = useNavigate();
   const user = useAppSelector(state => state.user);
-  const isLoggedIn = user?._id !== undefined;
+  const isLoggedIn = user?.id !== undefined;
   const showCreateButton = isLoggedIn && user?.isAdmin;
 
   return (
