@@ -8,31 +8,97 @@ import {
   Radio,
   Divider,
 } from '@mui/material';
-import { useState } from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { CreatingQuestion, HowManyAnswersByQuestionIndex } from '.';
+import { TopicProps } from '../topic-view-page';
 import styles from './edit-topic-page.module.css';
 
-export const AddTopicPage = () => {
+export const EditTopicPage = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [questions, setQuestions] = useState<CreatingQuestion[]>([]);
   const [howManyQuestions, setHowManyQuestions] = useState(0);
   const [howManyQuestionAnswers, setHowManyQuestionAnswers] =
     useState<HowManyAnswersByQuestionIndex>({});
+  const { topicId } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
+  const [topic, setTopic] = useState<TopicProps | null>();
+  const navigateTo = useNavigate();
+
+  useEffect(() => {
+    setIsLoading(true);
+    axios
+      .get<TopicProps>('/topics/' + topicId)
+      .then(res => {
+        setTopic(res.data);
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (topic) {
+      setTitle(topic.title);
+      setContent(topic.text);
+      setQuestions(
+        topic.questions.map((question, firstIndex) => {
+          return {
+            questionText: question.questionText,
+            correctAnswer:
+              question.possibleAnswers.findIndex(
+                answer => answer === question.correctAnswer,
+              ) ?? -1,
+            hint: question.hint,
+            possibleAnswers: question.possibleAnswers.map((answer, index) => {
+              return {
+                text: answer,
+                id: `${index}-${Math.floor(Math.random() * 100000 + 1)}`,
+              };
+            }),
+          };
+        }),
+      );
+      setHowManyQuestions(topic.questions.length);
+      setHowManyQuestionAnswers(
+        topic.questions.reduce(
+          (acc, cur, index) => ({
+            ...acc,
+            [index]: cur.possibleAnswers.length,
+          }),
+          {},
+        ),
+      );
+    }
+  }, [topic]);
+
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log({
-      title,
-      text: content,
-      questions: questions.map(
-        ({ questionText, correctAnswer, possibleAnswers, hint }) => ({
-          questionText,
-          correctAnswer: possibleAnswers[correctAnswer].text,
-          hint,
-          possibleAnswers: possibleAnswers.map(({ text }) => text),
-        }),
-      ),
-    });
+    setIsLoading(true);
+    axios
+      .put('/topics', {
+        id: topicId,
+        title,
+        text: content,
+        questions: questions.map(
+          ({ questionText, correctAnswer, possibleAnswers, hint }) => ({
+            questionText,
+            correctAnswer: possibleAnswers[correctAnswer].text,
+            hint,
+            possibleAnswers: possibleAnswers.map(({ text }) => text),
+          }),
+        ),
+      })
+      .then(() => {
+        setIsLoading(false);
+        navigateTo('/');
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
   };
   return (
     <Container>

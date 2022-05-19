@@ -4,4 +4,5 @@ export enum RoutePaths {
   topicList = '/',
   topic = '/tema/:topicId',
   addTopic = '/sukurti-tema',
+  editTopic = '/redaguoti-tema/:topicId',
 }

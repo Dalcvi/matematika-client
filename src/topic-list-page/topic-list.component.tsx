@@ -54,13 +54,22 @@ export const TopicList = () => {
           sx={{ width: '20%' }}
           className={styles.grid}
         >
-          {topics.map(value => (
-            <TopicListItem
-              key={value.id}
-              topic={value}
-              isAdmin={user?.isAdmin ?? false}
-            />
-          ))}
+          {topics.map((value, index) => {
+            const first = !!user && index === 0;
+            const second = !!user?.solvedTopics.includes(value.id);
+            return (
+              <TopicListItem
+                key={value.id}
+                topic={value}
+                isAdmin={user?.isAdmin ?? false}
+                show={
+                  (!!user && index === 0) ||
+                  !!user?.solvedTopics.includes(topics[index - 1].id)
+                }
+                completed={!!user?.solvedTopics.includes(value.id)}
+              />
+            );
+          })}
         </Grid>
       </Paper>
     </Container>

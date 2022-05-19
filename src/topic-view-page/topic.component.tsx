@@ -13,21 +13,23 @@ import {
   Paper,
   Typography,
 } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../store';
-import { getTopic } from './topic.middleware';
-import { TOPIC_LOADING_STATE_ID } from './topic.constants';
 import { SelectedAnswers, TopicProps } from './topic.types';
 import styles from './topic.module.css';
 import axios from 'axios';
+import { authenticateUser } from '../user';
 
 export function Topic() {
   const [value, setValue] = React.useState<SelectedAnswers>({});
-  const [error, setError] = React.useState(false);
-  const [helperText, setHelperText] = React.useState('Choose wisely');
+  const [failed, setFailed] = React.useState<string[]>([]);
   const { topicId } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [topic, setTopic] = useState<TopicProps | null>();
+  const [showHelperText, setShowHelperText] = useState<string[]>([]);
+  const user = useAppSelector(state => state.user);
+  const dispatch = useAppDispatch();
+  const navigateTo = useNavigate();
 
   useEffect(() => {
     setIsLoading(true);
@@ -47,8 +49,6 @@ export function Topic() {
     id: string,
   ) => {
     setValue({ ...value, [id]: (event.target as HTMLInputElement).value });
-    setHelperText(' ');
-    setError(false);
   };
 
   if (isLoading || !topic) {
@@ -60,6 +60,31 @@ export function Topic() {
       </Container>
     );
   }
+
+  const checkAnswers = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!topic) {
+      return;
+    }
+    const failedAnswers = topic.questions.filter(question => {
+      const answer = value[question.questionText];
+      return answer !== question.correctAnswer;
+    });
+    setFailed(failedAnswers.map(question => question.questionText));
+    if (failedAnswers.length > 0) {
+      return;
+    }
+
+    axios
+      .patch('/Users/addSolvedTopic', {
+        userId: user?.id,
+        topicId: topic.id,
+      })
+      .then(() => {
+        dispatch(authenticateUser());
+        navigateTo('/');
+      });
+  };
   return (
     <Container>
       <Paper elevation={6} className={styles.contentContainer}>
@@ -69,13 +94,9 @@ export function Topic() {
         <Typography variant="body1" color="text.primary" gutterBottom>
           {topic.text}
         </Typography>
-        <form>
-          <FormControl
-            sx={{ p: 3, width: '100%' }}
-            error={error}
-            variant="standard"
-          >
-            {topic.questions.map(question => (
+        <form onSubmit={checkAnswers}>
+          <FormControl sx={{ p: 3, width: '100%' }} variant="standard">
+            {topic.questions.map((question, index) => (
               <>
                 <Divider sx={{ mb: 3 }} />
                 <FormLabel id="demo-error-radios">
@@ -98,11 +119,30 @@ export function Topic() {
                     />
                   ))}
                 </RadioGroup>
-                <FormHelperText>{helperText}</FormHelperText>
+                {failed.includes(question.questionText) && (
+                  <FormHelperText className={styles.error}>
+                    Atsakymas neteisingas
+                  </FormHelperText>
+                )}
+                {!showHelperText.includes(question.questionText) && (
+                  <Button
+                    onClick={() =>
+                      setShowHelperText([
+                        ...showHelperText,
+                        question.questionText,
+                      ])
+                    }
+                  >
+                    Parodyti užuominą
+                  </Button>
+                )}
+                {showHelperText.includes(question.questionText) && (
+                  <FormHelperText>{question.hint}</FormHelperText>
+                )}
               </>
             ))}
             <Button sx={{ mt: 1, mr: 1 }} type="submit" variant="outlined">
-              Patikrinti atsakymą
+              Patikrinti atsakymus
             </Button>
           </FormControl>
         </form>

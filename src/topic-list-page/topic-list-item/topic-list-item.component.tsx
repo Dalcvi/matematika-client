@@ -11,25 +11,43 @@ import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../store';
 import { TopicProps } from '../../topic-view-page/topic.types';
-import { Lock } from '@mui/icons-material';
+import { Done, Lock } from '@mui/icons-material';
 import styles from './topic-list-item.module.css';
 
-type TopicProp = { topic: TopicProps; isAdmin: boolean };
+type TopicProp = {
+  topic: TopicProps;
+  isAdmin: boolean;
+  show: boolean;
+  completed: boolean;
+};
 
-export const TopicListItem: FC<TopicProp> = ({ topic, isAdmin }) => {
+export const TopicListItem: FC<TopicProp> = ({
+  topic,
+  isAdmin,
+  show,
+  completed,
+}) => {
   const navigateTo = useNavigate();
   const user = useAppSelector(state => state.user);
   const isLoggedIn = user?.id !== undefined;
 
-  const isDisabled = !isLoggedIn && !isAdmin;
+  const isDisabled = (!isLoggedIn || !show) && !isAdmin;
   return (
     <Grid item xs={2} sm={2} md={6} lg={4}>
       <Paper elevation={8} className={styles.relativeContainer}>
-        {isDisabled && (
+        {isDisabled && !completed && (
           <>
             <div className={styles.disabledMode} />
             <div className={styles.lock}>
               <Lock />
+            </div>
+          </>
+        )}
+        {completed && (
+          <>
+            <div className={styles.completedMode} />
+            <div className={styles.done}>
+              <Done className={styles.icon} />
             </div>
           </>
         )}
@@ -41,7 +59,14 @@ export const TopicListItem: FC<TopicProp> = ({ topic, isAdmin }) => {
               </Typography>
             </CardContent>
           </CardActionArea>
-          {isAdmin && <Button>Pakeisti</Button>}
+          {isAdmin && (
+            <Button
+              className={styles.editButton}
+              onClick={() => navigateTo(`/redaguoti-tema/${topic.id}`)}
+            >
+              Redaguoti
+            </Button>
+          )}
         </Card>
       </Paper>
     </Grid>
