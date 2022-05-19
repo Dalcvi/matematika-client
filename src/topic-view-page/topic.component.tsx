@@ -67,8 +67,12 @@ export function Topic() {
       return;
     }
     const failedAnswers = topic.questions.filter(question => {
-      const answer = value[question.questionText];
-      return answer !== question.correctAnswer;
+      const currentAnswer = value[question.questionText];
+      const fixedCurrentAnswer = currentAnswer
+        .split(' ')
+        .slice(0, -1)
+        .join(' ');
+      return fixedCurrentAnswer !== question.correctAnswer;
     });
     setFailed(failedAnswers.map(question => question.questionText));
     if (failedAnswers.length > 0) {
@@ -105,17 +109,17 @@ export function Topic() {
                 <RadioGroup
                   aria-labelledby="demo-error-radios"
                   name="quiz"
-                  value={value[question.questionText] || ''}
+                  value={value[question.questionText]}
                   onChange={event =>
                     handleRadioChange(event, question.questionText)
                   }
                 >
-                  {question.possibleAnswers.map(answer => (
+                  {question.possibleAnswers.map((answer, index) => (
                     <FormControlLabel
-                      value={answer}
+                      value={`${answer} ${index}`}
                       control={<Radio />}
                       label={answer}
-                      key={answer}
+                      key={answer + index}
                     />
                   ))}
                 </RadioGroup>
